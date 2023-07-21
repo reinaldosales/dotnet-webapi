@@ -1,6 +1,8 @@
 using DotnetWebAPI.Application.Interfaces;
+using DotnetWebAPI.Domain.ViewModels;
 using DotnetWebAPI.Services;
 using DotnetWebAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
@@ -21,22 +23,45 @@ namespace DotnetWebAPI.Controllers
         }
 
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginUserModel model)
+        {
+            _logger.ForContext("Payload", JsonConvert.SerializeObject(model)).Information("Login");
+
+            try
+            {
+                var token = await _userService.Login(model.Name, model.Password);
+
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                _logger.ForContext("Payload", JsonConvert.SerializeObject(model)).Error(ex.Message);
+                return BadRequest(ex);
+            }
+        }
+
         [HttpGet("RecoverAllUsers")]
+        [Authorize]
         public async Task<IActionResult> RecoverAllUsers()
         {
+            _logger.Information("RecoverAllUsers");
+
             try
             {
                 var users = await _userService.RecoverAllUsers();
 
                 return Ok(users);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.Error(ex.Message);
                 return BadRequest();
             }
         }
 
         [HttpPost("CreateUser")]
+        [Authorize(Roles = "Admin, Inviter")]
         public async Task<IActionResult> CreateUser(CreateUserModel createUserModel)
         {
             _logger.ForContext("Payload", JsonConvert.SerializeObject(createUserModel)).Information("CreateUser");
@@ -58,6 +83,7 @@ namespace DotnetWebAPI.Controllers
         }
 
         [HttpDelete("DeleteUser/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             _logger.ForContext("Payload", JsonConvert.SerializeObject(id)).Information("DeleteUser");
@@ -70,6 +96,7 @@ namespace DotnetWebAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.ForContext("Payload", JsonConvert.SerializeObject(id)).Error(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

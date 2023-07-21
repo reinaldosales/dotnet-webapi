@@ -12,20 +12,21 @@ namespace DotnetWebAPI.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,9 +45,9 @@ namespace DotnetWebAPI.Data.Migrations
                 {
                     table.PrimaryKey("PK_Purchase", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Purchase_Users_UserId",
+                        name: "FK_Purchase_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                 });
 
@@ -63,7 +64,7 @@ namespace DotnetWebAPI.Data.Migrations
                 name: "Purchase");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
         }
     }
 }

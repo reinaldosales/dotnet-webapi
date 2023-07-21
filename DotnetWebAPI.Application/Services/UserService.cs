@@ -9,9 +9,13 @@ namespace DotnetWebAPI.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITokenService _tokenService;
 
-        public UserService(IUserRepository userRepository)
-            => _userRepository = userRepository;
+        public UserService(IUserRepository userRepository, ITokenService tokenService)
+        {
+            _userRepository = userRepository;
+            _tokenService = tokenService;
+        }
 
         public async Task<IEnumerable<User>> RecoverAllUsers()
         {
@@ -23,6 +27,7 @@ namespace DotnetWebAPI.Services
             var user = new User(
                 createUserModel.Name,
                 new Email(createUserModel.Email),
+                "default",
                 DateTime.Now,
                 DateTime.Now,
                 null);
@@ -42,6 +47,16 @@ namespace DotnetWebAPI.Services
             user.DeletedAt = DateTime.Now;
 
             return await _userRepository.Update(user);
+        }
+
+        public async Task<string> Login(string name, string password)
+        {
+            var user = await _userRepository.RecoverByLogin(name, password);
+
+            if (user is null)
+                throw new NullReferenceException("User not found");
+
+            return _tokenService.GenerateToken(user);
         }
     }
 }

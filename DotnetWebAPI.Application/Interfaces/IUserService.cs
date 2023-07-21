@@ -15,5 +15,6 @@ namespace DotnetWebAPI.Application.Interfaces
         public Task<User> CreateUser(CreateUserModel createUserModel);
         public Task<User> RecoverUserById(int id);
         public Task<User> DeleteUser(int id);
+        public Task<string> Login(string name, string password);
     }
 }

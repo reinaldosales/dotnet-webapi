@@ -12,7 +12,7 @@ namespace DotnetWebAPI.Data.Repositories
             => _appDbContext = appDbContext;
 
         public async Task<IEnumerable<User>> RecoverAllUsers()
-            => await _appDbContext.Users
+            => await _appDbContext.User
             .AsNoTracking()
             .ToListAsync();
 
@@ -21,9 +21,14 @@ namespace DotnetWebAPI.Data.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<User> RecoverByLogin(string name, string password) 
+            => await _appDbContext.User
+            .AsNoTracking()
+            .FirstOrDefaultAsync(user => user.Name == name);
+
         public async Task<User> Save(User user)
         {
-            await _appDbContext.Users.AddAsync(user);
+            await _appDbContext.User.AddAsync(user);
             await _appDbContext.SaveChangesAsync();
 
             return user;

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotnetWebAPI.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230713170218_0003")]
-    partial class _0003
+    [Migration("20230721175119_0001")]
+    partial class _0001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,13 +81,18 @@ namespace DotnetWebAPI.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Name");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Role");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("DotnetWebAPI.Models.Purchase", b =>
@@ -113,7 +118,7 @@ namespace DotnetWebAPI.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

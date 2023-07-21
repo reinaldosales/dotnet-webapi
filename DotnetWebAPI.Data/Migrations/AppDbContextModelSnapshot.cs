@@ -78,13 +78,18 @@ namespace DotnetWebAPI.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Name");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Role");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("DotnetWebAPI.Models.Purchase", b =>
@@ -110,7 +115,7 @@ namespace DotnetWebAPI.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

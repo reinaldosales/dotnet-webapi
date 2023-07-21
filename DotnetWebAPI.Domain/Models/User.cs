@@ -6,13 +6,15 @@ namespace DotnetWebAPI.Models
     {
         protected User() { }
 
-        public User(string name, Email email, DateTime createdAt, DateTime updatedAt, DateTime? deletedAt) : base(createdAt, updatedAt, deletedAt)
+        public User(string name, Email email, string role, DateTime createdAt, DateTime updatedAt, DateTime? deletedAt) : base(createdAt, updatedAt, deletedAt)
         {
             Name = name;
             Email = email;
+            Role = role;
         }
 
         public string Name { get; }
         public Email Email { get; }
+        public string Role{ get; set; }
     }
 }

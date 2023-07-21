@@ -8,13 +8,17 @@ namespace DotnetWebAPI.ContextMappers
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("Users");
+            builder.ToTable("User");
 
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Name)
                 .HasColumnName("Name")
                 .IsRequired();
+
+            builder.Property(x => x.Role)
+               .HasColumnName("Role")
+               .IsRequired();
 
             builder.OwnsOne(x => x.Email)
                 .Property(x => x.Address)
